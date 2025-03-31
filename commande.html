@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bon de commande</title>
+  <style>
+    .floater div {
+      float: left;
+      margin: .5em;
+    }
+
+    .catalogue {
+      border-collapse: collapse;
+    }
+
+    .catalogue * {
+      text-align: center;
+    }
+
+    .catalogue td, .catalogue th {
+      padding: .25em;
+      border: 1px solid black;
+    }
+
+    .catalogue input[type=number] {
+      width: 4em;
+      border: none;
+    }
+
+    .bon {
+      border: 1px solid black;
+    }
+
+    .bon td, .bon th {
+      padding: .25em;
+      text-align: left;
+    }
+
+    .log {
+      border: 1px solid black;
+      padding: .5em;
+    }
+  </style>
+</head>
+<body>
+  <h3>Bon de commande</h3>
+
+  <h4>Comment ça marche ?</h4>
+
+  <p>toi envoyer bon <br> moi valider commande et envoyer toi facture <br> toi payer <br> moi envoyer <br> toi déguster 💯💯💯</p>
+  
+  <div class="floater">
+    <div id="catalogue"></div>
+    <div id="bon"></div>
+    <div class="log">
+      Bon à envoyer : <br>
+      <br>
+      <strong>- Par email manuel</strong> <br>
+      Destinataire : <code>lepreauxabeilles@gmail.com</code> <br>
+      Objet : <code>Bon de commande</code> <br>
+      Contenu : <button onclick="navigator.clipboard.writeText(bon_text)">Copier dans le presse-papiers</button> <br>
+      <br>
+      ou <br>
+      <br>
+      <strong>- Par email prérédigé</strong> <br>
+      <button onclick="textToMail()">Ouvrir email prérédigé</button> <br>
+    </div>
+  </div>
+
+  <script>
+
+let produits_finaux = []
+
+fetch("stocks.json")
+.then(response => response.json())
+.then(data => {
+
+  let final = `<table class="catalogue"><tr><th>Catégorie</th><th>Produit</th><th>Prix unitaire</th><th>Quantité</th></tr>`
+  
+  Object.keys(data).forEach(categorie => {
+    
+    let produits = data[categorie]
+
+    let row = `<tr><td rowspan="${produits.length}">${categorie}</td>`
+    
+    produits.forEach(produit => {
+      if(produit.disponible == "")
+        produits_finaux.push(produit)
+
+      row += `<td>${produit.nom}</td><td>${produit.prix.toFixed(2)} €</td><td>${produit.disponible == "" ? '<input type="number" id="' + produit.nom + '" value="0" step="1" min="0" onchange="generateBon()">' : produit.disponible}</td></tr>`
+
+      final += row
+
+      row = `<tr>`
+    })
+  })
+
+  final += `</table>`
+
+  document.getElementById("catalogue").innerHTML = final
+})
+
+let bon_text = ""
+
+function textToMail() {
+  let final = bon_text + ""
+  final = final.replaceAll(" ", "%20")
+  final = final.replaceAll(":", "%3A")
+  final = final.replaceAll("=", "%3D")
+  final = final.replaceAll("€", "%E2%82%AC")
+  final = final.replaceAll("\n", "%0A")
+
+  window.open("mailto:lepreauxabeilles@gmail.com?subject=Bon%20de%20commande&body=" + final)
+}
+
+function generateBon() {
+  let final = `<table class="bon"><tr><th>Produit</th><th>Prix unitaire</th><th>Quantité</th><th>Total</th>`
+
+  bon_text = ""
+
+  let total = 0
+
+  produits_finaux.forEach(produit => {
+    let quantite = Math.max(0, Math.round(document.getElementById(produit.nom).value))
+    if(quantite > 0) {
+      let cout = quantite * produit.prix
+  
+      total += cout
+
+      bon_text += `${quantite} x ${produit.nom} : ${quantite} x ${produit.prix.toFixed(2)} € = ${cout.toFixed(2)} €\n`
+  
+      final += `<tr><td>${produit.nom}</td><td>${produit.prix.toFixed(2)} €</td><td>${quantite}</td><td>${cout.toFixed(2)} €</td></tr>`
+    }
+  })
+
+  final += `<tr><td colspan="3"><strong>Total TTC</strong></td><td><strong>${total.toFixed(2)} €</strong></td></tr></table>`
+  
+  bon_text += `Total TTC : ${total.toFixed(2)} €`
+
+  document.getElementById("bon").innerHTML = final
+}
+
+generateBon()
+
+
+  </script>
+</body>
+</html>

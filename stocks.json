@@ -1,0 +1,73 @@
+{
+  "Tisanes" : [
+    {
+      "nom" : "L'heure des braves",
+      "prix" : 1.00,
+      "disponible" : ""
+    },
+    {
+      "nom" : "L'heure des nanas",
+      "prix" : 2.00,
+      "disponible" : ""
+    },
+    {
+      "nom" : "L'heure de la sieste",
+      "prix" : 3.00,
+      "disponible" : ""
+    },
+    {
+      "nom" : "L'heure d'hiver",
+      "prix" : 4.00,
+      "disponible" : ""
+    },
+    {
+      "nom" : "L'heure d'été",
+      "prix" : 5.00,
+      "disponible" : ""
+    }
+  ],
+  "Miels" : [
+    {
+      "nom" : "Miel de printemps (250g)",
+      "prix" : 5.99,
+      "disponible" : ""
+    },
+    {
+      "nom" : "Miel de printemps (500g)",
+      "prix" : 9.99,
+      "disponible" : ""
+    },
+    {
+      "nom" : "Miel d'été (250g)",
+      "prix" : 4.99,
+      "disponible" : "Bientôt disponible"
+    },
+    {
+      "nom" : "Miel d'été (500g)",
+      "prix" : 8.99,
+      "disponible" : "En rupture de stock"
+    }
+  ],
+  "Aromates" : [
+    {
+      "nom" : "Sel au piment",
+      "prix" : 5.49,
+      "disponible" : ""
+    },
+    {
+      "nom" : "Sel aux champignons",
+      "prix" : 5.99,
+      "disponible" : ""
+    },
+    {
+      "nom" : "Sel au fenouil",
+      "prix" : 4.99,
+      "disponible" : ""
+    },
+    {
+      "nom" : "Sel des ours",
+      "prix" : 5.49,
+      "disponible" : ""
+    }
+  ]
+}
